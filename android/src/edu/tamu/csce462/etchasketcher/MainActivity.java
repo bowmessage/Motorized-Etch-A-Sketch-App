@@ -1,8 +1,15 @@
 package edu.tamu.csce462.etchasketcher;
 
+import java.io.File;
+import java.io.IOException;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.media.ExifInterface;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.Menu;
@@ -15,22 +22,100 @@ public class MainActivity extends Activity {
 	ImageView mImageView;
 	ImageView resultImageView;
 	
+	String mCurrentPhotoPath;
+
+	private File createImageFile() throws IOException {
+	    // Create an image file name
+	    //String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date());
+	    //String imageFileName = "JPEG_" + timeStamp + "_";
+		String imageFileName = "imageBeforeEdgeDection";
+	    File storageDir = getExternalFilesDir(null);
+	    File image = File.createTempFile(
+	        imageFileName,  /* prefix */
+	        ".jpg",         /* suffix */
+	        storageDir      /* directory */
+	    );
+
+	    // Save a file: path for use with ACTION_VIEW intents
+	    mCurrentPhotoPath = image.getAbsolutePath();
+	    return image;
+	}
+	
+	private void setPic() {
+	    // Get the dimensions of the View
+	    int targetW = mImageView.getWidth();
+	    int targetH = mImageView.getHeight();
+
+	    // Get the dimensions of the bitmap
+	    BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+	    bmOptions.inJustDecodeBounds = true;
+	    BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
+	    int photoW = bmOptions.outWidth;
+	    int photoH = bmOptions.outHeight;
+
+	    // Determine how much to scale down the image
+	    int scaleFactor = Math.min(photoW/targetW, photoH/targetH);
+
+	    // Decode the image file into a Bitmap sized to fill the View
+	    bmOptions.inJustDecodeBounds = false;
+	    bmOptions.inSampleSize = scaleFactor;
+	    bmOptions.inPurgeable = true;
+
+	    Bitmap scaledBitmap = BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
+	    
+	    
+	    try {
+			ExifInterface exif = new ExifInterface(mCurrentPhotoPath);
+			int rotation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);  
+			int rotationInDegrees = exifToDegrees(rotation);
+			
+			Matrix matrix = new Matrix();
+			if (rotation != 0f) {matrix.preRotate(rotationInDegrees);}
+			
+			Bitmap rotated = Bitmap.createBitmap(scaledBitmap, 0,0, scaledBitmap.getWidth(), scaledBitmap.getHeight(), matrix, true);
+			mImageView.setImageBitmap(rotated);
+
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			mImageView.setImageBitmap(scaledBitmap);
+		}
+	}
+	private static int exifToDegrees(int exifOrientation) {        
+	    if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_90) { return 90; } 
+	    else if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_180) {  return 180; } 
+	    else if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_270) {  return 270; }            
+	    return 0;    
+	 }
 	
 	static final int REQUEST_IMAGE_CAPTURE = 1;
 	private void dispatchTakePictureIntent() {
-	    Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+		Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+	    // Ensure that there's a camera activity to handle the intent
 	    if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-	        startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+	        // Create the File where the photo should go
+	        File photoFile = null;
+	        try {
+	            photoFile = createImageFile();
+	        } catch (IOException ex) {
+	            // Error occurred while creating the File
+	            ex.printStackTrace();
+	        }
+	        // Continue only if the File was successfully created
+	        if (photoFile != null) {
+	            takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
+	                    Uri.fromFile(photoFile));
+	            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+	        }
 	    }
 	}
 	
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 	    if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-	        Bundle extras = data.getExtras();
-	        Bitmap imageBitmap = (Bitmap) extras.get("data");
-	        mImageView.setImageBitmap(imageBitmap);
+	        setPic();
 	    }
+	    
 	}
 
     @Override
