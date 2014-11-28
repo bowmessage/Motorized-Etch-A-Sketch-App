@@ -1,6 +1,7 @@
 package edu.tamu.csce462.etchasketcher;
-import java.awt.image.BufferedImage;
 import java.util.Arrays;
+
+import android.graphics.Bitmap;
 
 /**
  * <p><em>This software has been released into the public domain.
@@ -23,7 +24,7 @@ import java.util.Arrays;
  * //apply it to an image
  * detector.setSourceImage(frame);
  * detector.process();
- * BufferedImage edges = detector.getEdgesImage();
+ * Bitmap edges = detector.getEdgesImage();
  * </code></pre>
  * 
  * <p>For a more complete understanding of this edge detector's parameters
@@ -49,8 +50,8 @@ public class CannyEdgeDetector {
 	private int picsize;
 	private int[] data;
 	private int[] magnitude;
-	private BufferedImage sourceImage;
-	private BufferedImage edgesImage;
+	private Bitmap sourceImage;
+	private Bitmap edgesImage;
 	
 	private float gaussianKernelRadius;
 	private float lowThreshold;
@@ -86,7 +87,7 @@ public class CannyEdgeDetector {
 	 * @return the source image, or null
 	 */
 	
-	public BufferedImage getSourceImage() {
+	public Bitmap getSourceImage() {
 		return sourceImage;
 	}
 	
@@ -98,21 +99,21 @@ public class CannyEdgeDetector {
 	 * @param image a source of luminance data
 	 */
 	
-	public void setSourceImage(BufferedImage image) {
+	public void setSourceImage(Bitmap image) {
 		sourceImage = image;
 	}
 
 	/**
 	 * Obtains an image containing the edges detected during the last call to
 	 * the process method. The buffered image is an opaque image of type
-	 * BufferedImage.TYPE_INT_ARGB in which edge pixels are white and all other
+	 * Bitmap.TYPE_INT_ARGB in which edge pixels are white and all other
 	 * pixels are black.
 	 * 
 	 * @return an image containing the detected edges, or null if the process
 	 * method has not yet been called.
 	 */
 	
-	public BufferedImage getEdgesImage() {
+	public Bitmap getEdgesImage() {
 		return edgesImage;
 	}
  
@@ -124,7 +125,7 @@ public class CannyEdgeDetector {
 	 * @param edgesImage expected (though not required) to be null
 	 */
 	
-	public void setEdgesImage(BufferedImage edgesImage) {
+	public void setEdgesImage(Bitmap edgesImage) {
 		this.edgesImage = edgesImage;
 	}
 
@@ -496,9 +497,13 @@ public class CannyEdgeDetector {
 	}
 	
 	private void readLuminance() {
-		int type = sourceImage.getType();
-		if (type == BufferedImage.TYPE_INT_RGB || type == BufferedImage.TYPE_INT_ARGB) {
-			int[] pixels = (int[]) sourceImage.getData().getDataElements(0, 0, width, height, null);
+		//int type = sourceImage.getType();
+		Bitmap.Config bc = sourceImage.getConfig();
+		if(bc == Bitmap.Config.ARGB_8888){
+		//if (type == Bitmap.TYPE_INT_RGB || type == Bitmap.TYPE_INT_ARGB) {
+			int[] pixels = new int[width * height];
+			sourceImage.getPixels(pixels, 0, width, 0, 0, width, height);
+			//int[] pixels = (int[]) sourceImage.getData().getDataElements(0, 0, width, height, null);
 			for (int i = 0; i < picsize; i++) {
 				int p = pixels[i];
 				int r = (p & 0xff0000) >> 16;
@@ -506,17 +511,17 @@ public class CannyEdgeDetector {
 				int b = p & 0xff;
 				data[i] = luminance(r, g, b);
 			}
-		} else if (type == BufferedImage.TYPE_BYTE_GRAY) {
+		} /*else if (type == Bitmap.TYPE_BYTE_GRAY) {
 			byte[] pixels = (byte[]) sourceImage.getData().getDataElements(0, 0, width, height, null);
 			for (int i = 0; i < picsize; i++) {
 				data[i] = (pixels[i] & 0xff);
 			}
-		} else if (type == BufferedImage.TYPE_USHORT_GRAY) {
+		} else if (type == Bitmap.TYPE_USHORT_GRAY) {
 			short[] pixels = (short[]) sourceImage.getData().getDataElements(0, 0, width, height, null);
 			for (int i = 0; i < picsize; i++) {
 				data[i] = (pixels[i] & 0xffff) / 256;
 			}
-		} else if (type == BufferedImage.TYPE_3BYTE_BGR) {
+		} else if (type == Bitmap.TYPE_3BYTE_BGR) {
             byte[] pixels = (byte[]) sourceImage.getData().getDataElements(0, 0, width, height, null);
             int offset = 0;
             for (int i = 0; i < picsize; i++) {
@@ -525,8 +530,8 @@ public class CannyEdgeDetector {
                 int r = pixels[offset++] & 0xff;
                 data[i] = luminance(r, g, b);
             }
-        } else {
-			throw new IllegalArgumentException("Unsupported image type: " + type);
+        }*/ else {
+			throw new IllegalArgumentException("Unsupported image type: " + bc);
 		}
 	}
  
@@ -554,12 +559,14 @@ public class CannyEdgeDetector {
 	
 	private void writeEdges(int pixels[]) {
 		//NOTE: There is currently no mechanism for obtaining the edge data
-		//in any other format other than an INT_ARGB type BufferedImage.
+		//in any other format other than an INT_ARGB type Bitmap.
 		//This may be easily remedied by providing alternative accessors.
 		if (edgesImage == null) {
-			edgesImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+			edgesImage = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+			//edgesImage = new Bitmap(width, height, Bitmap.TYPE_INT_ARGB);
 		}
-		edgesImage.getWritableTile(0, 0).setDataElements(0, 0, width, height, pixels);
+		edgesImage.setPixels(pixels, 0, width, 0, 0, width, height);
+		//edgesImage.getWritableTile(0, 0).setDataElements(0, 0, width, height, pixels);
 	}
  
 }
