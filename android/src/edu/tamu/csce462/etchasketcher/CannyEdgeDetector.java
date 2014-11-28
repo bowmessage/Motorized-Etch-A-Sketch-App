@@ -459,14 +459,15 @@ public class CannyEdgeDetector {
 		for (int y = 0; y < height; y++) {
 			for (int x = 0; x < width; x++) {
 				if (data[offset] == 0 && magnitude[offset] >= high) {
-					follow(x, y, offset, low);
+					follow(x, y, offset, low, 0);
 				}
 				offset++;
 			}
 		}
  	}
- 
-	private void follow(int x1, int y1, int i1, int threshold) {
+	
+	private static final int recursionThreshold = 100;
+	private void follow(int x1, int y1, int i1, int threshold, int recursionDepth) {
 		int x0 = x1 == 0 ? x1 : x1 - 1;
 		int x2 = x1 == width - 1 ? x1 : x1 + 1;
 		int y0 = y1 == 0 ? y1 : y1 - 1;
@@ -478,8 +479,9 @@ public class CannyEdgeDetector {
 				int i2 = x + y * width;
 				if ((y != y1 || x != x1)
 					&& data[i2] == 0 
-					&& magnitude[i2] >= threshold) {
-					follow(x, y, i2, threshold);
+					&& magnitude[i2] >= threshold
+					&& recursionDepth < recursionThreshold) {
+					follow(x, y, i2, threshold, recursionDepth+1);
 					return;
 				}
 			}
