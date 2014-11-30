@@ -2,6 +2,9 @@ package edu.tamu.csce462.etchasketcher;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Set;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -16,6 +19,9 @@ import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.view.View.OnClickListener;
+import android.bluetooth.*;
+import android.os.*;
 
 public class MainActivity extends Activity {
 
@@ -157,16 +163,99 @@ public class MainActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-
+		
+		//generate various buttons...
 		Button takePictureButton = (Button) findViewById(R.id.takePictureButton);
-		mImageView = (ImageView) findViewById(R.id.imageView1);
-		resultImageView = (ImageView) findViewById(R.id.imageView2);
+		//mImageView = (ImageView) findViewById(R.id.imageView1);
+		//resultImageView = (ImageView) findViewById(R.id.imageView2);
 		takePictureButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				dispatchTakePictureIntent();
 			}
 		});
+		
+		Button drawCircleButton = (Button) findViewById(R.id.drawCircleButton);
+		drawCircleButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				
+			}
+		});
+		
+		Button drawSquareButton = (Button) findViewById(R.id.drawSquareButton);
+		drawSquareButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				//sudo code
+				//create array of strings
+				//insert points 50,10; 50,50; 100,50; 100,10;
+				//send array to bluetooth
+			}
+		});
+		
+		Button drawTriangleButton = (Button) findViewById(R.id.drawTriangleButton);
+		drawTriangleButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				
+			}
+		});
+		
+		Button drawTAMUButton = (Button) findViewById(R.id.drawTAMUButton);
+		drawTAMUButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				
+			}
+		});
+		
+		Button drawPuppyButton = (Button) findViewById(R.id.drawPuppyButton);
+		drawPuppyButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				
+			}
+		});
+		
+		Button drawInfoButton = (Button) findViewById(R.id.drawInfoButton);
+		drawInfoButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				
+			}
+		});
+		
+		Button clearButton = (Button) findViewById(R.id.clearButton);
+		clearButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				
+			}
+		});
+	}
+	
+	//create bluetooth connection (maybe...will need testing)
+	private OutputStream outputStream;
+	private InputStream inStream;
+	
+	private void bluetooth() throws IOException {
+		BluetoothAdapter blue1 = BluetoothAdapter.getDefaultAdapter();
+		if(blue1 != null) {
+			if(blue1.isEnabled()) {
+				Set<BluetoothDevice> boundedDevices = blue1.getBondedDevices();
+				
+				if(boundedDevices.size() > 0) {
+					BluetoothDevice[] devices = (BluetoothDevice[]) boundedDevices.toArray();
+					BluetoothDevice device = devices[0];
+					ParcelUuid[] uuids = device.getUuids();
+					BluetoothSocket socket = device.createRfcommSocketToServiceRecord(uuids[0].getUuid());
+					socket.connect();
+					outputStream = socket.getOutputStream();
+					inStream = socket.getInputStream();
+				}				
+			}
+		}
 	}
 
 	@Override
@@ -175,5 +264,6 @@ public class MainActivity extends Activity {
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
 	}
+	
 
 }
