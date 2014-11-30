@@ -12,7 +12,7 @@
         android:id="@+id/textView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/hello_world" />
+        android:text="TAMU CSCE 462 Group 3" />
 
     <Button
         android:id="@+id/takePictureButton"
@@ -23,32 +23,68 @@
         android:layout_marginTop="18dp"
         android:text="Press to Take Photo" />
 
-    <ScrollView
-        android:id="@+id/scrollView1"
-        android:layout_width="fill_parent"
+    <Button
+        android:id="@+id/drawTriangleButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/takePictureButton"
+        android:layout_toRightOf="@+id/drawSquareButton"
+        android:text="Triangle" />
+
+    <Button
+        android:id="@+id/drawInfoButton"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/takePictureButton"
+        android:layout_alignRight="@+id/drawCircleButton"
+        android:layout_below="@+id/drawCircleButton"
+        android:text="Info" />
+
+    <Button
+        android:id="@+id/drawCircleButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
         android:layout_below="@+id/takePictureButton"
-        android:layout_marginTop="24dp" >
+        android:text="Circle" />
 
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical" >
+    <Button
+        android:id="@+id/drawPuppyButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/drawTAMUButton"
+        android:layout_alignBottom="@+id/drawTAMUButton"
+        android:layout_alignLeft="@+id/drawTriangleButton"
+        android:layout_alignRight="@+id/drawTriangleButton"
+        android:text="Puppy" />
 
-            <ImageView
-                android:id="@+id/imageView1"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_launcher" />
+    <Button
+        android:id="@+id/drawTAMUButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/drawInfoButton"
+        android:layout_alignBottom="@+id/drawInfoButton"
+        android:layout_toRightOf="@+id/drawInfoButton"
+        android:text="TAMU" />
 
-            <ImageView
-                android:id="@+id/imageView2"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="26dp"
-                android:src="@drawable/ic_launcher" />
-        </LinearLayout>
-    </ScrollView>
+    <Button
+        android:id="@+id/drawSquareButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/drawTriangleButton"
+        android:layout_alignBottom="@+id/drawTriangleButton"
+        android:layout_alignLeft="@+id/drawTAMUButton"
+        android:text="Square" />
+
+    <Button
+        android:id="@+id/clearButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/drawInfoButton"
+        android:layout_alignParentBottom="true"
+        android:layout_alignRight="@+id/drawPuppyButton"
+        android:layout_marginBottom="22dp"
+        android:text="Clear Screen" />
 
 </RelativeLayout>
