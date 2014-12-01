@@ -11,10 +11,19 @@ print "listening on port "
 
 #uuid = "11111111-2222-3333-4444-555555555555"
 
-bluetooth.advertise_service(server_sock, "SampleServer", service_classes=[bluetooth.SERIAL_PORT_CLASS], profiles=[bluetooth.SERIAL_PORT_PROFILE])
-
-client_sock,address = server_sock.accept()
-print "Accepted from ",address
+#bluetooth.advertise_service(server_sock, "SampleServer", service_classes=[bluetooth.SERIAL_PORT_CLASS], profiles=[bluetooth.SERIAL_PORT_PROFILE])
+target_name = "SAMSUNG-SM-G900A"
+target_address = None
+nearby_devices = bluetooth.discover_devices()
+for bdaddr in nearby_devices:
+  if target_name == bluetooth.lookup_name( bdaddr ):
+    target_address = bdaddr
+    break
+if target_address is not None:
+  client_sock,address = server_sock.accept()
+  print "Accepted from ",address
+else:
+  print "device 'SAMSUNG-SM-G900A' not found"
 
 
 GPIO.setmode(GPIO.BCM)
