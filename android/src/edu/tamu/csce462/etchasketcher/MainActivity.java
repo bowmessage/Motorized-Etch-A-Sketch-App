@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.util.Set;
 
 import android.app.Activity;
@@ -298,6 +299,8 @@ public class MainActivity extends Activity {
 						socket.connect();
 						outputStream = socket.getOutputStream();
 						inStream = socket.getInputStream();
+						PrintWriter writer = new PrintWriter(outputStream);
+						writer.write("Hello, this is a test.");
 					}
 					
 				}
