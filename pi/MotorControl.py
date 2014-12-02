@@ -7,7 +7,7 @@ server_sock=bluetooth.BluetoothSocket( bluetooth.RFCOMM )
 server_sock.bind(("", bluetooth.PORT_ANY))
 server_sock.listen(1)
 
-print "listening on port "
+print ("listening on port ")
 
 #uuid = "11111111-2222-3333-4444-555555555555"
 
@@ -21,9 +21,9 @@ for bdaddr in nearby_devices:
     break
 if target_address is not None:
   client_sock,address = server_sock.accept()
-  print "Accepted from ",address
+  print ("Accepted from ",address)
 else:
-  print "device 'SAMSUNG-SM-G900A' not found"
+  print ("device 'SAMSUNG-SM-G900A' not found")
 
 
 GPIO.setmode(GPIO.BCM)
