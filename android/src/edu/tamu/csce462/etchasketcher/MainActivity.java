@@ -4,20 +4,20 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Set;
 
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
-import android.content.BroadcastReceiver;
-import android.content.Context;
+import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.ParcelUuid;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Menu;
@@ -250,7 +250,7 @@ public class MainActivity extends Activity {
 		BluetoothAdapter blue1 = BluetoothAdapter.getDefaultAdapter();
 		if(blue1 != null) {
 			if(blue1.isEnabled()) {
-				
+				/*
 				BroadcastReceiver bReceiver = new BroadcastReceiver(){
 				    @Override
 				    public void onReceive(Context context, Intent intent) {
@@ -277,21 +277,30 @@ public class MainActivity extends Activity {
 				
 				
 				
-				blue1.startDiscovery();
+				blue1.startDiscovery();*/
 				
-				/*
+				
 				Set<BluetoothDevice> boundedDevices = blue1.getBondedDevices();
 				
 				if(boundedDevices.size() > 0) {
 					BluetoothDevice[] devices = boundedDevices.toArray(new BluetoothDevice[0]);
-					BluetoothDevice device = devices[0];
-					Log.d("BLUETOOTH", device.getName());
-					ParcelUuid[] uuids = device.getUuids();
-					BluetoothSocket socket = device.createRfcommSocketToServiceRecord(uuids[0].getUuid());
-					socket.connect();
-					outputStream = socket.getOutputStream();
-					inStream = socket.getInputStream();
-				}			*/
+					BluetoothDevice rasp = null;
+					for(int i = 0; i < devices.length; i++){
+						if(devices[i].getName().startsWith("rasp")){
+							rasp = devices[i];
+							break;
+						}
+					}
+					if(rasp != null){
+						Log.d("BLUETOOTH", rasp.getName());
+						ParcelUuid[] uuids = rasp.getUuids();
+						BluetoothSocket socket = rasp.createRfcommSocketToServiceRecord(uuids[0].getUuid());
+						socket.connect();
+						outputStream = socket.getOutputStream();
+						inStream = socket.getInputStream();
+					}
+					
+				}
 			}
 		}
 	}
