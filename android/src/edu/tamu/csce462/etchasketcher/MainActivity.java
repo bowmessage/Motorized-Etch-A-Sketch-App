@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.util.Set;
+import java.util.UUID;
 
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
@@ -222,7 +223,7 @@ public class MainActivity extends Activity {
 		drawPuppyButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				
+				Log.d("","Puppy Clicked.");
 			}
 		});
 		
@@ -295,12 +296,15 @@ public class MainActivity extends Activity {
 					if(rasp != null){
 						Log.d("BLUETOOTH", rasp.getName());
 						ParcelUuid[] uuids = rasp.getUuids();
-						BluetoothSocket socket = rasp.createRfcommSocketToServiceRecord(uuids[0].getUuid());
+						UUID testUUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
+						BluetoothSocket socket = rasp.createRfcommSocketToServiceRecord(testUUID);
 						socket.connect();
+						Log.d("BLUETOOTH", "Connection success, thus far: " + socket.isConnected());
 						outputStream = socket.getOutputStream();
 						inStream = socket.getInputStream();
 						PrintWriter writer = new PrintWriter(outputStream);
 						writer.write("Hello, this is a test.");
+						writer.flush();
 					}
 					
 				}
