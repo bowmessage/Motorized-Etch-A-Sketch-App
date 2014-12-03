@@ -2,11 +2,16 @@ package edu.tamu.csce462.etchasketcher;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Set;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.PrintWriter;
+import java.util.Set;
+import java.util.UUID;
 
 import android.app.Activity;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -14,14 +19,14 @@ import android.graphics.Matrix;
 import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.ParcelUuid;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.view.View.OnClickListener;
-import android.bluetooth.*;
-import android.os.*;
 
 public class MainActivity extends Activity {
 
@@ -198,7 +203,11 @@ public class MainActivity extends Activity {
 		drawTriangleButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				
+				try{
+					bluetooth();
+				} catch (IOException ioe){
+					ioe.printStackTrace();
+				}
 			}
 		});
 		
@@ -214,7 +223,7 @@ public class MainActivity extends Activity {
 		drawPuppyButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				
+				Log.d("","Puppy Clicked.");
 			}
 		});
 		
@@ -243,17 +252,62 @@ public class MainActivity extends Activity {
 		BluetoothAdapter blue1 = BluetoothAdapter.getDefaultAdapter();
 		if(blue1 != null) {
 			if(blue1.isEnabled()) {
+				/*
+				BroadcastReceiver bReceiver = new BroadcastReceiver(){
+				    @Override
+				    public void onReceive(Context context, Intent intent) {
+				        String action = intent.getAction(); 
+
+				        if (BluetoothDevice.ACTION_FOUND.equals(action)){
+				            Log.d("BLUETOOTH", "Got FOUND action");
+				        }
+
+				        if (BluetoothAdapter.ACTION_DISCOVERY_STARTED.equals(action)){
+				            Log.d("BLUETOOTH", "Got STARTED action");
+				        }
+				        
+				        if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)){
+				            Log.d("BLUETOOTH", "Got FINISHED action");
+				        }
+				    }
+				};
+				
+				registerReceiver(bReceiver, new IntentFilter(BluetoothDevice.ACTION_FOUND));
+				registerReceiver(bReceiver, new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED));
+				registerReceiver(bReceiver, new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_STARTED));
+				
+				
+				
+				
+				blue1.startDiscovery();*/
+				
+				
 				Set<BluetoothDevice> boundedDevices = blue1.getBondedDevices();
 				
 				if(boundedDevices.size() > 0) {
-					BluetoothDevice[] devices = (BluetoothDevice[]) boundedDevices.toArray();
-					BluetoothDevice device = devices[0];
-					ParcelUuid[] uuids = device.getUuids();
-					BluetoothSocket socket = device.createRfcommSocketToServiceRecord(uuids[0].getUuid());
-					socket.connect();
-					outputStream = socket.getOutputStream();
-					inStream = socket.getInputStream();
-				}				
+					BluetoothDevice[] devices = boundedDevices.toArray(new BluetoothDevice[0]);
+					BluetoothDevice rasp = null;
+					for(int i = 0; i < devices.length; i++){
+						if(devices[i].getName().startsWith("rasp")){
+							rasp = devices[i];
+							break;
+						}
+					}
+					if(rasp != null){
+						Log.d("BLUETOOTH", rasp.getName());
+						ParcelUuid[] uuids = rasp.getUuids();
+						UUID testUUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
+						BluetoothSocket socket = rasp.createRfcommSocketToServiceRecord(testUUID);
+						socket.connect();
+						Log.d("BLUETOOTH", "Connection success, thus far: " + socket.isConnected());
+						outputStream = socket.getOutputStream();
+						inStream = socket.getInputStream();
+						PrintWriter writer = new PrintWriter(outputStream);
+						writer.write("Hello, this is a test.");
+						writer.flush();
+					}
+					
+				}
 			}
 		}
 	}
