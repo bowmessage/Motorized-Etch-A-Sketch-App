@@ -5,8 +5,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.Scanner;
 import java.util.Set;
-import java.util.UUID;
 
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
@@ -53,52 +55,55 @@ public class MainActivity extends Activity {
 	}
 
 	private void setPic() {
-	    // Get the dimensions of the View
-	    int targetW = mImageView.getWidth();
-	    int targetH = mImageView.getHeight();
+		// Get the dimensions of the View
+		int targetW = mImageView.getWidth();
+		int targetH = mImageView.getHeight();
 
-	    // Get the dimensions of the bitmap
-	    BitmapFactory.Options bmOptions = new BitmapFactory.Options();
-	    bmOptions.inJustDecodeBounds = true;
-	    BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
-	    int photoW = bmOptions.outWidth;
-	    int photoH = bmOptions.outHeight;
+		// Get the dimensions of the bitmap
+		BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+		bmOptions.inJustDecodeBounds = true;
+		BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
+		int photoW = bmOptions.outWidth;
+		int photoH = bmOptions.outHeight;
 
-	    // Determine how much to scale down the image
-	    int scaleFactor = Math.min(photoW/targetW, photoH/targetH);
+		// Determine how much to scale down the image
+		int scaleFactor = Math.min(photoW / targetW, photoH / targetH);
 
-	    // Decode the image file into a Bitmap sized to fill the View
-	    bmOptions.inJustDecodeBounds = false;
-	    bmOptions.inSampleSize = scaleFactor;
-	    bmOptions.inPurgeable = true;
+		// Decode the image file into a Bitmap sized to fill the View
+		bmOptions.inJustDecodeBounds = false;
+		bmOptions.inSampleSize = scaleFactor;
+		bmOptions.inPurgeable = true;
 
-	    Bitmap scaledBitmap = BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
-	    
-	    
-	    try {
+		Bitmap scaledBitmap = BitmapFactory.decodeFile(mCurrentPhotoPath,
+				bmOptions);
+
+		try {
 			ExifInterface exif = new ExifInterface(mCurrentPhotoPath);
-			int rotation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);  
+			int rotation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION,
+					ExifInterface.ORIENTATION_NORMAL);
 			int rotationInDegrees = exifToDegrees(rotation);
-			
-			Matrix matrix = new Matrix();
-			if (rotation != 0f) {matrix.preRotate(rotationInDegrees);}
-			
-			Bitmap rotated = Bitmap.createBitmap(scaledBitmap, 0,0, scaledBitmap.getWidth(), scaledBitmap.getHeight(), matrix, true);
-			mImageView.setImageBitmap(rotated);
-			
-		   CannyEdgeDetector edgeDetector = new CannyEdgeDetector();
-		   edgeDetector.setSourceImage(rotated);
-		   edgeDetector.process();
-		   resultImageView.setImageBitmap(edgeDetector.getEdgesImage());
 
+			Matrix matrix = new Matrix();
+			if (rotation != 0f) {
+				matrix.preRotate(rotationInDegrees);
+			}
+
+			Bitmap rotated = Bitmap.createBitmap(scaledBitmap, 0, 0,
+					scaledBitmap.getWidth(), scaledBitmap.getHeight(), matrix,
+					true);
+			mImageView.setImageBitmap(rotated);
+
+			CannyEdgeDetector edgeDetector = new CannyEdgeDetector();
+			edgeDetector.setSourceImage(rotated);
+			edgeDetector.process();
+			resultImageView.setImageBitmap(edgeDetector.getEdgesImage());
 
 		} catch (IOException e) {
-			//print the stack trace and abort the rotation, just scale.
+			// print the stack trace and abort the rotation, just scale.
 			e.printStackTrace();
 			mImageView.setImageBitmap(scaledBitmap);
 		}
-	    
-	    
+
 	}
 
 	private static int exifToDegrees(int exifOrientation) {
@@ -168,145 +173,177 @@ public class MainActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		
-		//generate various buttons...
+
+		// generate various buttons...
 		Button takePictureButton = (Button) findViewById(R.id.takePictureButton);
-		//mImageView = (ImageView) findViewById(R.id.imageView1);
-		//resultImageView = (ImageView) findViewById(R.id.imageView2);
+		// mImageView = (ImageView) findViewById(R.id.imageView1);
+		// resultImageView = (ImageView) findViewById(R.id.imageView2);
 		takePictureButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				dispatchTakePictureIntent();
 			}
 		});
-		
+
 		Button drawCircleButton = (Button) findViewById(R.id.drawCircleButton);
 		drawCircleButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				
+
 			}
 		});
-		
+
 		Button drawSquareButton = (Button) findViewById(R.id.drawSquareButton);
 		drawSquareButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				//sudo code
-				//create array of strings
-				//insert points 50,10; 50,50; 100,50; 100,10;
-				//send array to bluetooth
+				// sudo code
+				// create array of strings
+				// insert points 50,10; 50,50; 100,50; 100,10;
+				// send array to bluetooth
 			}
 		});
-		
+
 		Button drawTriangleButton = (Button) findViewById(R.id.drawTriangleButton);
 		drawTriangleButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				try{
+				try {
 					bluetooth();
-				} catch (IOException ioe){
+				} catch (IOException ioe) {
+					ioe.printStackTrace();
+				} catch (IllegalAccessException ioe) {
+					ioe.printStackTrace();
+				} catch (IllegalArgumentException ioe) {
+					ioe.printStackTrace();
+				} catch (InvocationTargetException ioe) {
+					ioe.printStackTrace();
+				} catch (NoSuchMethodException ioe) {
 					ioe.printStackTrace();
 				}
 			}
 		});
-		
+
 		Button drawTAMUButton = (Button) findViewById(R.id.drawTAMUButton);
 		drawTAMUButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				
+
 			}
 		});
-		
+
 		Button drawPuppyButton = (Button) findViewById(R.id.drawPuppyButton);
 		drawPuppyButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Log.d("","Puppy Clicked.");
+				Log.d("", "Puppy Clicked.");
 			}
 		});
-		
+
 		Button drawInfoButton = (Button) findViewById(R.id.drawInfoButton);
 		drawInfoButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				
+
 			}
 		});
-		
+
 		Button clearButton = (Button) findViewById(R.id.clearButton);
 		clearButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				
+
 			}
 		});
 	}
-	
-	//create bluetooth connection (maybe...will need testing)
+
+	// create bluetooth connection (maybe...will need testing)
 	private OutputStream outputStream;
 	private InputStream inStream;
-	
-	private void bluetooth() throws IOException {
+
+	private void bluetooth() throws IOException, IllegalAccessException,
+			IllegalArgumentException, InvocationTargetException, NoSuchMethodException {
 		BluetoothAdapter blue1 = BluetoothAdapter.getDefaultAdapter();
-		if(blue1 != null) {
-			if(blue1.isEnabled()) {
+		if (blue1 != null) {
+			if (blue1.isEnabled()) {
 				/*
-				BroadcastReceiver bReceiver = new BroadcastReceiver(){
-				    @Override
-				    public void onReceive(Context context, Intent intent) {
-				        String action = intent.getAction(); 
+				 * BroadcastReceiver bReceiver = new BroadcastReceiver(){
+				 * 
+				 * @Override public void onReceive(Context context, Intent
+				 * intent) { String action = intent.getAction();
+				 * 
+				 * if (BluetoothDevice.ACTION_FOUND.equals(action)){
+				 * Log.d("BLUETOOTH", "Got FOUND action"); }
+				 * 
+				 * if
+				 * (BluetoothAdapter.ACTION_DISCOVERY_STARTED.equals(action)){
+				 * Log.d("BLUETOOTH", "Got STARTED action"); }
+				 * 
+				 * if
+				 * (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)){
+				 * Log.d("BLUETOOTH", "Got FINISHED action"); } } };
+				 * 
+				 * registerReceiver(bReceiver, new
+				 * IntentFilter(BluetoothDevice.ACTION_FOUND));
+				 * registerReceiver(bReceiver, new
+				 * IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED));
+				 * registerReceiver(bReceiver, new
+				 * IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_STARTED));
+				 * 
+				 * 
+				 * 
+				 * 
+				 * blue1.startDiscovery();
+				 */
 
-				        if (BluetoothDevice.ACTION_FOUND.equals(action)){
-				            Log.d("BLUETOOTH", "Got FOUND action");
-				        }
-
-				        if (BluetoothAdapter.ACTION_DISCOVERY_STARTED.equals(action)){
-				            Log.d("BLUETOOTH", "Got STARTED action");
-				        }
-				        
-				        if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)){
-				            Log.d("BLUETOOTH", "Got FINISHED action");
-				        }
-				    }
-				};
-				
-				registerReceiver(bReceiver, new IntentFilter(BluetoothDevice.ACTION_FOUND));
-				registerReceiver(bReceiver, new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED));
-				registerReceiver(bReceiver, new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_STARTED));
-				
-				
-				
-				
-				blue1.startDiscovery();*/
-				
-				
 				Set<BluetoothDevice> boundedDevices = blue1.getBondedDevices();
-				
-				if(boundedDevices.size() > 0) {
-					BluetoothDevice[] devices = boundedDevices.toArray(new BluetoothDevice[0]);
+
+				if (boundedDevices.size() > 0) {
+					BluetoothDevice[] devices = boundedDevices
+							.toArray(new BluetoothDevice[0]);
 					BluetoothDevice rasp = null;
-					for(int i = 0; i < devices.length; i++){
-						if(devices[i].getName().startsWith("rasp")){
+					for (int i = 0; i < devices.length; i++) {
+						if (devices[i].getName().startsWith("rasp")) {
 							rasp = devices[i];
 							break;
 						}
 					}
-					if(rasp != null){
+					if (rasp != null) {
 						Log.d("BLUETOOTH", rasp.getName());
 						ParcelUuid[] uuids = rasp.getUuids();
-						UUID testUUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
-						BluetoothSocket socket = rasp.createRfcommSocketToServiceRecord(testUUID);
+						// UUID testUUID =
+						// UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
+						// BluetoothSocket socket =
+						// rasp.createRfcommSocketToServiceRecord(uuids[0].getUuid());
+						Method method = rasp.getClass()
+								.getMethod("createRfcommSocket",
+										new Class[] { int.class }); 
+						BluetoothSocket socket = (BluetoothSocket) method
+								.invoke(rasp, 1);
+						// BluetoothSocket socket = rasp.createRfcommSocket(1);
 						socket.connect();
-						Log.d("BLUETOOTH", "Connection success, thus far: " + socket.isConnected());
+						Log.d("BLUETOOTH", "Connection success, thus far: "
+								+ socket.isConnected());
 						outputStream = socket.getOutputStream();
 						inStream = socket.getInputStream();
+						Scanner scan = new Scanner(inStream);
+						//if(scan.hasNext()){
+						//	Log.d("BLUETOOTH",scan.next());
+						//}
+						try {
+							Thread.sleep(2000);
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						
 						PrintWriter writer = new PrintWriter(outputStream);
 						writer.write("Hello, this is a test.");
 						writer.flush();
+						
+						//scan.close();
 					}
-					
+
 				}
 			}
 		}
@@ -318,6 +355,5 @@ public class MainActivity extends Activity {
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
 	}
-	
 
 }
