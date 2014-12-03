@@ -7,14 +7,22 @@ server_sock=bluetooth.BluetoothSocket( bluetooth.RFCOMM )
 server_sock.bind(("", bluetooth.PORT_ANY))
 server_sock.listen(1)
 
-print "listening on port "
+port = server_sock.getsockname()[1]
 
-#uuid = "11111111-2222-3333-4444-555555555555"
+print "listening on port %d" % port
 
-bluetooth.advertise_service(server_sock, "SampleServer", service_classes=[bluetooth.SERIAL_PORT_CLASS], profiles=[bluetooth.SERIAL_PORT_PROFILE])
+uuid = "94f39d29-7d6d-437d-973b-fba39e49d4ee"
+
+bluetooth.advertise_service(server_sock, "SampleServer", uuid)#, service_classes=[bluetooth.SERIAL_PORT_CLASS], profiles=[bluetooth.SERIAL_PORT_PROFILE])
 
 client_sock,address = server_sock.accept()
 print "Accepted from ",address
+
+#server_sock.send("this is a test.")
+#print("We sent. Recv now.")
+
+print("About to recv.")
+print(client_sock.recv(1024))
 
 
 GPIO.setmode(GPIO.BCM)
