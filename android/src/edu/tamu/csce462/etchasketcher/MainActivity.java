@@ -189,7 +189,18 @@ public class MainActivity extends Activity {
 		drawCircleButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				if (isConnected == true) {
+					PrintWriter writer = new PrintWriter(outputStream);
+					writer.write("circle test");
+					writer.flush();
+				}
+				else {
+					CharSequence text = "Must connect to device first!";
+					int duration = Toast.LENGTH_SHORT;
 
+					Toast toast = Toast.makeText(context, text, duration);
+					toast.show();
+				}
 			}
 		});
 
@@ -197,10 +208,18 @@ public class MainActivity extends Activity {
 		drawSquareButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				// sudo code
-				// create array of strings
-				// insert points 50,10; 50,50; 100,50; 100,10;
-				// send array to bluetooth
+				if (isConnected == true) {
+					PrintWriter writer = new PrintWriter(outputStream);
+					writer.write("square test");
+					writer.flush();
+				}
+				else {
+					CharSequence text = "Must connect to device first!";
+					int duration = Toast.LENGTH_SHORT;
+
+					Toast toast = Toast.makeText(context, text, duration);
+					toast.show();
+				}
 			}
 		});
 
@@ -208,18 +227,17 @@ public class MainActivity extends Activity {
 		drawTriangleButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				try {
-					bluetooth();
-				} catch (IOException ioe) {
-					ioe.printStackTrace();
-				} catch (IllegalAccessException ioe) {
-					ioe.printStackTrace();
-				} catch (IllegalArgumentException ioe) {
-					ioe.printStackTrace();
-				} catch (InvocationTargetException ioe) {
-					ioe.printStackTrace();
-				} catch (NoSuchMethodException ioe) {
-					ioe.printStackTrace();
+				if (isConnected == true) {
+					PrintWriter writer = new PrintWriter(outputStream);
+					writer.write("triangle test");
+					writer.flush();
+				}
+				else {
+					CharSequence text = "Must connect to device first!";
+					int duration = Toast.LENGTH_SHORT;
+
+					Toast toast = Toast.makeText(context, text, duration);
+					toast.show();
 				}
 			}
 		});
@@ -228,7 +246,18 @@ public class MainActivity extends Activity {
 		drawTAMUButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				if (isConnected == true) {
+					PrintWriter writer = new PrintWriter(outputStream);
+					writer.write("TAMU test");
+					writer.flush();
+				}
+				else {
+					CharSequence text = "Must connect to device first!";
+					int duration = Toast.LENGTH_SHORT;
 
+					Toast toast = Toast.makeText(context, text, duration);
+					toast.show();
+				}
 			}
 		});
 
@@ -236,7 +265,18 @@ public class MainActivity extends Activity {
 		drawPuppyButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Log.d("", "Puppy Clicked.");
+				if (isConnected == true) {
+					PrintWriter writer = new PrintWriter(outputStream);
+					writer.write("puppy test");
+					writer.flush();
+				}
+				else {
+					CharSequence text = "Must connect to device first!";
+					int duration = Toast.LENGTH_SHORT;
+
+					Toast toast = Toast.makeText(context, text, duration);
+					toast.show();
+				}
 			}
 		});
 
@@ -255,11 +295,32 @@ public class MainActivity extends Activity {
 
 			}
 		});
+		
+		Button connectButton = (Button) findViewById(R.id.connectButton);
+		connectButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				try {
+					bluetooth();
+				} catch (IOException ioe) {
+					ioe.printStackTrace();
+				} catch (IllegalAccessException ioe) {
+					ioe.printStackTrace();
+				} catch (IllegalArgumentException ioe) {
+					ioe.printStackTrace();
+				} catch (InvocationTargetException ioe) {
+					ioe.printStackTrace();
+				} catch (NoSuchMethodException ioe) {
+					ioe.printStackTrace();
+				}
+			}
+		});
 	}
 
 	// create bluetooth connection (maybe...will need testing)
 	private OutputStream outputStream;
 	private InputStream inStream;
+	private boolean isConnected;
 
 	private void bluetooth() throws IOException, IllegalAccessException,
 			IllegalArgumentException, InvocationTargetException, NoSuchMethodException {
@@ -338,10 +399,10 @@ public class MainActivity extends Activity {
 						}
 						
 						PrintWriter writer = new PrintWriter(outputStream);
-						writer.write("Hello, this is a test.");
+						writer.write("Connected to Pi.");
+						isConnected = true;
 						writer.flush();
 						
-						//scan.close();
 					}
 
 				}
