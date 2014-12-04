@@ -195,6 +195,7 @@ public class MainActivity extends Activity {
 					writer.flush();
 				}
 				else {
+					Context context = getApplicationContext();
 					CharSequence text = "Must connect to device first!";
 					int duration = Toast.LENGTH_SHORT;
 
@@ -214,6 +215,7 @@ public class MainActivity extends Activity {
 					writer.flush();
 				}
 				else {
+					Context context = getApplicationContext();
 					CharSequence text = "Must connect to device first!";
 					int duration = Toast.LENGTH_SHORT;
 
@@ -233,6 +235,7 @@ public class MainActivity extends Activity {
 					writer.flush();
 				}
 				else {
+					Context context = getApplicationContext();
 					CharSequence text = "Must connect to device first!";
 					int duration = Toast.LENGTH_SHORT;
 
@@ -252,6 +255,7 @@ public class MainActivity extends Activity {
 					writer.flush();
 				}
 				else {
+					Context context = getApplicationContext();
 					CharSequence text = "Must connect to device first!";
 					int duration = Toast.LENGTH_SHORT;
 
@@ -271,6 +275,7 @@ public class MainActivity extends Activity {
 					writer.flush();
 				}
 				else {
+					Context context = getApplicationContext();
 					CharSequence text = "Must connect to device first!";
 					int duration = Toast.LENGTH_SHORT;
 
@@ -284,7 +289,19 @@ public class MainActivity extends Activity {
 		drawInfoButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				if (isConnected == true) {
+					PrintWriter writer = new PrintWriter(outputStream);
+					writer.write("info test");
+					writer.flush();
+				}
+				else {
+					Context context = getApplicationContext();
+					CharSequence text = "Must connect to device first!";
+					int duration = Toast.LENGTH_SHORT;
 
+					Toast toast = Toast.makeText(context, text, duration);
+					toast.show();
+				}
 			}
 		});
 
@@ -292,7 +309,19 @@ public class MainActivity extends Activity {
 		clearButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				if (isConnected == true) {
+					PrintWriter writer = new PrintWriter(outputStream);
+					writer.write("clear/reset test");
+					writer.flush();
+				}
+				else {
+					Context context = getApplicationContext();
+					CharSequence text = "Must connect to device first!";
+					int duration = Toast.LENGTH_SHORT;
 
+					Toast toast = Toast.makeText(context, text, duration);
+					toast.show();
+				}
 			}
 		});
 		
