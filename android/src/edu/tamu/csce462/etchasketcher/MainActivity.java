@@ -364,6 +364,27 @@ public class MainActivity extends Activity {
 				}
 			}
 		});
+		
+		Button livedrawButton = (Button) findViewById(R.id.livedrawButton);
+		livedrawButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				if (isConnected == true) {
+					public void sendMessage(View view) {
+					    Intent intent = new Intent(this, live_draw_activity.java);
+					    startActivity(intent);
+					}
+				}
+				else {
+					Context context = getApplicationContext();
+					CharSequence text = "Must connect to device first!";
+					int duration = Toast.LENGTH_SHORT;
+
+					Toast toast = Toast.makeText(context, text, duration);
+					toast.show();
+				}
+			}
+		});
 	}
 
 	// create bluetooth connection (maybe...will need testing)
