@@ -304,6 +304,26 @@ public class MainActivity extends Activity {
 				}
 			}
 		});
+		
+		Button frameButton = (Button) findViewById(R.id.frameButton);
+		frameButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				if (isConnected == true) {
+					PrintWriter writer = new PrintWriter(outputStream);
+					writer.write("frame test");
+					writer.flush();
+				}
+				else {
+					Context context = getApplicationContext();
+					CharSequence text = "Must connect to device first!";
+					int duration = Toast.LENGTH_SHORT;
+
+					Toast toast = Toast.makeText(context, text, duration);
+					toast.show();
+				}
+			}
+		});
 
 		Button clearButton = (Button) findViewById(R.id.clearButton);
 		clearButton.setOnClickListener(new OnClickListener() {
