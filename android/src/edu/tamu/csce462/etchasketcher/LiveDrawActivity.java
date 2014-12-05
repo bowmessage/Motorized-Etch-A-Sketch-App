@@ -28,8 +28,14 @@ public class LiveDrawActivity extends Activity {
 		    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 		        if (isChecked) {
 		           isRealTime = true;
+					PrintWriter writer = new PrintWriter(MainActivity.outputStream);
+					writer.write("Live Draw: RealTime on test");
+					writer.flush();
 		        } else {
 		           isRealTime = false;
+					PrintWriter writer = new PrintWriter(MainActivity.outputStream);
+					writer.write("Live Draw: RealTime off test");
+					writer.flush();
 		        }
 		    }
 		});
