@@ -22,4 +22,12 @@
         android:text="Real Time Drawing"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
+    <Button
+        android:id="@+id/submitButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/realtimeToggle"
+        android:layout_centerHorizontal="true"
+        android:text="Submit" />
+
 </RelativeLayout>

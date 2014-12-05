@@ -388,8 +388,8 @@ public class MainActivity extends Activity {
 	}
 
 	// create bluetooth connection (maybe...will need testing)
-	private OutputStream outputStream;
-	private InputStream inStream;
+	public static OutputStream outputStream;
+	public static InputStream inStream;
 	private boolean isConnected;
 
 	private void bluetooth() throws IOException, IllegalAccessException,
