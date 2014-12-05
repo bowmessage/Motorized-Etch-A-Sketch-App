@@ -104,4 +104,12 @@
         android:layout_centerVertical="true"
         android:text="Frame" />
 
+    <Button
+        android:id="@+id/livedrawButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/clearButton"
+        android:layout_centerHorizontal="true"
+        android:text="Live Draw" />
+
 </RelativeLayout>
