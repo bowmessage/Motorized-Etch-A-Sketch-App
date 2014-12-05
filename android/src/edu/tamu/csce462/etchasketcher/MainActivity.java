@@ -372,10 +372,8 @@ public class MainActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				if (isConnected == true) {
-					public void sendMessage(View view) {
-					    Intent intent = new Intent(this, live_draw_activity.java);
+					    Intent intent = new Intent(MainActivity.this, LiveDrawActivity.class);
 					    startActivity(intent);
-					}
 				}
 				else {
 					Context context = getApplicationContext();
