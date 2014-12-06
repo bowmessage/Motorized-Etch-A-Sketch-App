@@ -1,22 +1,25 @@
 package edu.tamu.csce462.etchasketcher;
 
 import java.io.PrintWriter;
+import java.util.ArrayList;
 
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
 public class LiveDrawActivity extends Activity {
 
 	private boolean isRealTime;
+	private ArrayList<Integer> realtimeList = new ArrayList<Integer>();
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -46,8 +49,10 @@ public class LiveDrawActivity extends Activity {
 			public void onClick(View v) {
 				if (isRealTime == false) {
 					PrintWriter writer = new PrintWriter(MainActivity.outputStream);
-					writer.write("Live Draw: submit test");
+					writer.write("Live Draw: submit button test");
 					writer.flush();
+					realtimeList.clear();
+					realtimeList.trimToSize();
 				}
 				else {
 					Context context = getApplicationContext();
@@ -58,7 +63,23 @@ public class LiveDrawActivity extends Activity {
 					toast.show();
 				}
 			}
-		});
+		});	
+
+	    final RelativeLayout parent = (RelativeLayout) findViewById(R.id.RelativeLayout);
+	    parent.setOnTouchListener(new OnTouchListener() {
+	        public boolean onTouch(View v, MotionEvent ev) {
+	        	if (isRealTime == true) {
+	        		PrintWriter writer = new PrintWriter(MainActivity.outputStream);
+	        		writer.write("Live Draw: Touch at " + ev.getX() + "," + ev.getY());
+	        		writer.flush();
+	        	}
+	        	else {
+	        		
+	        	}
+	            return true;
+	            
+	        }
+	    });
 	}
 	
 	
