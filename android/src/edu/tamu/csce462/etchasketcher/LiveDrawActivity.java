@@ -20,7 +20,7 @@ import android.widget.ToggleButton;
 public class LiveDrawActivity extends Activity {
 
 	private boolean isRealTime;
-	private ArrayList<Integer> realtimeList = new ArrayList<Integer>();
+	private ArrayList<Float> realtimeList = new ArrayList<Float>();
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -79,8 +79,8 @@ public class LiveDrawActivity extends Activity {
 					writer.flush();
 	        	}
 	        	else {
-	        		realtimeList.add((int) ev.getX());
-	        		realtimeList.add((int) ev.getY());
+	        		realtimeList.add(ev.getX());
+	        		realtimeList.add(ev.getY());
 	        	}
 	            return true;
 	            
