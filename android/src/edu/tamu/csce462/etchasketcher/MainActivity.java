@@ -213,7 +213,7 @@ public class MainActivity extends Activity {
 			public void onClick(View v) {
 				if (isConnected == true) {
 					PrintWriter writer = new PrintWriter(outputStream);
-					writer.write("square test");
+					writer.write("[100,100,100,500,500,500,500,100,100,100]");
 					writer.flush();
 				}
 				else {
@@ -233,7 +233,7 @@ public class MainActivity extends Activity {
 			public void onClick(View v) {
 				if (isConnected == true) {
 					PrintWriter writer = new PrintWriter(outputStream);
-					writer.write("triangle test");
+					writer.write("[500,100,50,500,950,500,500,100");
 					writer.flush();
 				}
 				else {
@@ -253,7 +253,7 @@ public class MainActivity extends Activity {
 			public void onClick(View v) {
 				if (isConnected == true) {
 					PrintWriter writer = new PrintWriter(outputStream);
-					writer.write("TAMU test");
+					writer.write("[200,100,200,150,300,150,300,125,500,125,500,500,300,500,300,550,750,550,750,500,700,500,700,125,900,125,900,150,950,150,950,100,200,100]");
 					writer.flush();
 				}
 				else {
@@ -313,7 +313,7 @@ public class MainActivity extends Activity {
 			public void onClick(View v) {
 				if (isConnected == true) {
 					PrintWriter writer = new PrintWriter(outputStream);
-					writer.write("frame test");
+					writer.write("[0,0,0,650,1000,650,1000,0,0,0]");
 					writer.flush();
 				}
 				else {
@@ -333,7 +333,7 @@ public class MainActivity extends Activity {
 			public void onClick(View v) {
 				if (isConnected == true) {
 					PrintWriter writer = new PrintWriter(outputStream);
-					writer.write("clear/reset test");
+					writer.write("[0,0]");
 					writer.flush();
 				}
 				else {
