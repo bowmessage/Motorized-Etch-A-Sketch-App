@@ -213,7 +213,7 @@ public class MainActivity extends Activity {
 			public void onClick(View v) {
 				if (isConnected == true) {
 					PrintWriter writer = new PrintWriter(outputStream);
-					writer.write("[100,100,100,500,500,500,500,100,100,100]");
+					writer.write("[100.0,100.0,100.0,500.0,500.0,500.0,500.0,100.0,100.0,100.0]");
 					writer.flush();
 				}
 				else {
