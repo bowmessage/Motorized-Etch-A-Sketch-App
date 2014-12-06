@@ -3,6 +3,7 @@ package edu.tamu.csce462.etchasketcher;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 
+import android.R.string;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
@@ -31,14 +32,10 @@ public class LiveDrawActivity extends Activity {
 		    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 		        if (isChecked) {
 		           isRealTime = true;
-					PrintWriter writer = new PrintWriter(MainActivity.outputStream);
-					writer.write("Live Draw: RealTime on test");
-					writer.flush();
+		           realtimeList.clear();
+		           realtimeList.trimToSize();
 		        } else {
 		           isRealTime = false;
-					PrintWriter writer = new PrintWriter(MainActivity.outputStream);
-					writer.write("Live Draw: RealTime off test");
-					writer.flush();
 		        }
 		    }
 		});
@@ -49,7 +46,15 @@ public class LiveDrawActivity extends Activity {
 			public void onClick(View v) {
 				if (isRealTime == false) {
 					PrintWriter writer = new PrintWriter(MainActivity.outputStream);
-					writer.write("Live Draw: submit button test");
+					String submit_array = "[";
+					for(int i = 0; i < realtimeList.size(); i++) {
+						submit_array = submit_array + String.valueOf(realtimeList.get(i)) + ",";
+					}
+					if(submit_array.length() > 2) {
+						submit_array = submit_array.substring(0, submit_array.length()-1);
+					}
+					submit_array = submit_array + "]";
+					writer.write(submit_array);
 					writer.flush();
 					realtimeList.clear();
 					realtimeList.trimToSize();
@@ -69,12 +74,13 @@ public class LiveDrawActivity extends Activity {
 	    parent.setOnTouchListener(new OnTouchListener() {
 	        public boolean onTouch(View v, MotionEvent ev) {
 	        	if (isRealTime == true) {
-	        		PrintWriter writer = new PrintWriter(MainActivity.outputStream);
-	        		writer.write("Live Draw: Touch at " + ev.getX() + "," + ev.getY());
-	        		writer.flush();
+					PrintWriter writer = new PrintWriter(MainActivity.outputStream);
+					writer.write("[" + ev.getX() + "," + ev.getY() + "]");
+					writer.flush();
 	        	}
 	        	else {
-	        		
+	        		realtimeList.add((int) ev.getX());
+	        		realtimeList.add((int) ev.getY());
 	        	}
 	            return true;
 	            
