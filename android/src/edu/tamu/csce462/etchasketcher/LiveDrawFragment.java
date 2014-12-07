@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -14,7 +15,6 @@ import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CompoundButton;
-import android.widget.RelativeLayout;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
@@ -88,10 +88,29 @@ public class LiveDrawFragment extends Fragment {
 			}
 		});
 
-		final RelativeLayout parent = (RelativeLayout) view
-				.findViewById(R.id.RelativeLayout);
-		parent.setOnTouchListener(new OnTouchListener() {
+		final View drawField = (View) view.findViewById(R.id.drawView);
+		drawField.setOnTouchListener(new OnTouchListener() {
 			public boolean onTouch(View v, MotionEvent ev) {
+				switch (ev.getAction()) {
+				case MotionEvent.ACTION_DOWN:
+					// disable swiping when the button is touched
+					MainActivity.swipeable = false;
+					// the rest of the code...
+					Log.d("", "Disable Swipe");
+					break;
+				case MotionEvent.ACTION_MOVE:
+
+					break;
+				case MotionEvent.ACTION_UP:
+					// re enable swipping when the touch is stopped
+					// the rest of the code...
+					MainActivity.swipeable = true;
+					Log.d("", "Enable Swipe");
+					break;
+				}
+
+				v.performClick();
+
 				if (MainActivity.isConnected) {
 					if (isRealTime == true) {
 						PrintWriter writer = new PrintWriter(
@@ -110,13 +129,24 @@ public class LiveDrawFragment extends Fragment {
 
 					Toast toast = Toast.makeText(context, text, duration);
 					toast.show();
-					return false;
+					return true;
 				}
 
 			}
 		});
+		/*
+		 * drawField.setOnDragListener(new OnDragListener(){
+		 * 
+		 * @Override public boolean onDrag(View v, DragEvent event) {
+		 * 
+		 * ViewParent parent = v.getParent(); // or get a reference to the
+		 * ViewPager and cast it to ViewParent
+		 * 
+		 * parent.requestDisallowInterceptTouchEvent(true); return false; }
+		 * 
+		 * });
+		 */
 
 		return view;
 	}
-
 }

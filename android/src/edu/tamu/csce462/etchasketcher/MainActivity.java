@@ -88,8 +88,7 @@ public class MainActivity extends FragmentActivity {
 			return true;
 		case R.id.action_clear:
 			if (MainActivity.isConnected == true) {
-				PrintWriter writer = new PrintWriter(
-						MainActivity.outputStream);
+				PrintWriter writer = new PrintWriter(MainActivity.outputStream);
 				writer.write("[0,0]");
 				writer.flush();
 			} else {
@@ -107,8 +106,8 @@ public class MainActivity extends FragmentActivity {
 	}
 
 	CustomPagerAdapter mCustomPagerAdapter;
-	ViewPager mViewPager;
-
+	SwipeToggleableViewPager mViewPager;
+	
 	class CustomPagerAdapter extends FragmentPagerAdapter {
 
 		Context mContext;
@@ -153,37 +152,6 @@ public class MainActivity extends FragmentActivity {
 		}
 	}
 
-	class ParentFragment extends Fragment {
-		@Override
-		public View onCreateView(LayoutInflater inflater, ViewGroup container,
-				Bundle savedInstanceState) {
-			// Inflate the layout resource that'll be returned
-			Bundle args = getArguments();
-			View rootView = null;
-			/*
-			 * switch (args.getInt("page_position")) { // starts at 1 case 1:
-			 * rootView = inflater.inflate(R.layout.preset_fragment, container,
-			 * false); break;
-			 * 
-			 * case 2: rootView = inflater.inflate(R.layout.live_draw_activity,
-			 * container, false); break;
-			 * 
-			 * case 3: rootView = inflater.inflate(R.layout.photo_fragment,
-			 * container, false); break; }
-			 */
-
-			// Get the arguments that was supplied when
-			// the fragment was instantiated in the
-			// CustomPagerAdapter
-
-			// ((TextView)
-			// rootView.findViewById(R.id.textView1)).setText("Page " +
-			// args.getInt("page_position"));
-
-			return rootView;
-		}
-	}
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -192,53 +160,40 @@ public class MainActivity extends FragmentActivity {
 		mCustomPagerAdapter = new CustomPagerAdapter(
 				getSupportFragmentManager(), this);
 
-		mViewPager = (ViewPager) findViewById(R.id.pager);
+		mViewPager = (SwipeToggleableViewPager) findViewById(R.id.pager);
 		mViewPager.setAdapter(mCustomPagerAdapter);
 
-		/*Button connectButton = (Button) findViewById(R.id.connectButton);
-		connectButton.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				try {
-					bluetooth();
-				} catch (IOException ioe) {
-					ioe.printStackTrace();
-				} catch (IllegalAccessException ioe) {
-					ioe.printStackTrace();
-				} catch (IllegalArgumentException ioe) {
-					ioe.printStackTrace();
-				} catch (InvocationTargetException ioe) {
-					ioe.printStackTrace();
-				} catch (NoSuchMethodException ioe) {
-					ioe.printStackTrace();
-				}
-			}
-		});*/
-			/*
-		Button livedrawButton = (Button) findViewById(R.id.livedrawButton);
-		livedrawButton.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				if (isConnected == true) {
-					Intent intent = new Intent(MainActivity.this,
-							LiveDrawFragment.class);
-					startActivity(intent);
-				} else {
-					Context context = getApplicationContext();
-					CharSequence text = "Must connect to device first!";
-					int duration = Toast.LENGTH_SHORT;
-
-					Toast toast = Toast.makeText(context, text, duration);
-					toast.show();
-				}
-			}
-		});*/
+		/*
+		 * Button connectButton = (Button) findViewById(R.id.connectButton);
+		 * connectButton.setOnClickListener(new OnClickListener() {
+		 * 
+		 * @Override public void onClick(View v) { try { bluetooth(); } catch
+		 * (IOException ioe) { ioe.printStackTrace(); } catch
+		 * (IllegalAccessException ioe) { ioe.printStackTrace(); } catch
+		 * (IllegalArgumentException ioe) { ioe.printStackTrace(); } catch
+		 * (InvocationTargetException ioe) { ioe.printStackTrace(); } catch
+		 * (NoSuchMethodException ioe) { ioe.printStackTrace(); } } });
+		 */
+		/*
+		 * Button livedrawButton = (Button) findViewById(R.id.livedrawButton);
+		 * livedrawButton.setOnClickListener(new OnClickListener() {
+		 * 
+		 * @Override public void onClick(View v) { if (isConnected == true) {
+		 * Intent intent = new Intent(MainActivity.this,
+		 * LiveDrawFragment.class); startActivity(intent); } else { Context
+		 * context = getApplicationContext(); CharSequence text =
+		 * "Must connect to device first!"; int duration = Toast.LENGTH_SHORT;
+		 * 
+		 * Toast toast = Toast.makeText(context, text, duration); toast.show();
+		 * } } });
+		 */
 	}
 
 	// create bluetooth connection (maybe...will need testing)
 	public static OutputStream outputStream;
 	public static InputStream inStream;
-	public static boolean isConnected;
+	public static boolean isConnected = false;
+	public static boolean swipeable = true;
 
 	private void bluetooth() throws IOException, IllegalAccessException,
 			IllegalArgumentException, InvocationTargetException,

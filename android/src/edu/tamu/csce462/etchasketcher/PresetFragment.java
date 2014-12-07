@@ -19,11 +19,11 @@ public class PresetFragment extends Fragment {
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-            Bundle savedInstanceState) {
-		
-		final View view = inflater.inflate(R.layout.preset_fragment, container, false);
-		
-		
+			Bundle savedInstanceState) {
+
+		final View view = inflater.inflate(R.layout.preset_fragment, container,
+				false);
+
 		Spinner spinner = (Spinner) view.findViewById(R.id.spinner1);
 		// Create an ArrayAdapter using the string array and a default spinner
 		// layout
@@ -34,9 +34,6 @@ public class PresetFragment extends Fragment {
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		// Apply the adapter to the spinner
 		spinner.setAdapter(adapter);
-		
-
-		Log.e("", "ASDFLKASJDF" + adapter.getItem(1));
 
 		Button drawButton = (Button) view.findViewById(R.id.drawButton);
 		drawButton.setOnClickListener(new OnClickListener() {
@@ -45,8 +42,8 @@ public class PresetFragment extends Fragment {
 				if (MainActivity.isConnected) {
 					PrintWriter writer = new PrintWriter(
 							MainActivity.outputStream);
-					Spinner spinner = (Spinner) view.findViewById(
-							R.id.spinner1);
+					Spinner spinner = (Spinner) view
+							.findViewById(R.id.spinner1);
 					String selected = (String) spinner.getSelectedItem();
 
 					String toWrite = "";
@@ -78,27 +75,20 @@ public class PresetFragment extends Fragment {
 				}
 			}
 		});
-/*
-		Button clearButton = (Button) view.findViewById(R.id.clearButton);
-		clearButton.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				if (MainActivity.isConnected == true) {
-					PrintWriter writer = new PrintWriter(
-							MainActivity.outputStream);
-					writer.write("[0,0]");
-					writer.flush();
-				} else {
-					Context context = getActivity();
-					CharSequence text = "Must connect to device first!";
-					int duration = Toast.LENGTH_SHORT;
+		/*
+		 * Button clearButton = (Button) view.findViewById(R.id.clearButton);
+		 * clearButton.setOnClickListener(new OnClickListener() {
+		 * 
+		 * @Override public void onClick(View v) { if (MainActivity.isConnected
+		 * == true) { PrintWriter writer = new PrintWriter(
+		 * MainActivity.outputStream); writer.write("[0,0]"); writer.flush(); }
+		 * else { Context context = getActivity(); CharSequence text =
+		 * "Must connect to device first!"; int duration = Toast.LENGTH_SHORT;
+		 * 
+		 * Toast toast = Toast.makeText(context, text, duration); toast.show();
+		 * } } });
+		 */
 
-					Toast toast = Toast.makeText(context, text, duration);
-					toast.show();
-				}
-			}
-		});*/
-		
 		return view;
 	}
 
