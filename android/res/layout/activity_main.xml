@@ -23,93 +23,45 @@
         android:layout_marginTop="18dp"
         android:text="Press to Take Photo" />
 
-    <Button
-        android:id="@+id/drawTriangleButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/takePictureButton"
-        android:layout_toRightOf="@+id/drawSquareButton"
-        android:text="Triangle" />
-
-    <Button
-        android:id="@+id/drawInfoButton"
+    <Spinner
+        android:id="@+id/spinner1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/takePictureButton"
-        android:layout_alignRight="@+id/drawCircleButton"
-        android:layout_below="@+id/drawCircleButton"
-        android:text="Info" />
+        android:layout_below="@+id/takePictureButton" />
 
     <Button
-        android:id="@+id/drawCircleButton"
+        android:id="@+id/drawButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/takePictureButton"
-        android:text="Circle" />
-
-    <Button
-        android:id="@+id/drawPuppyButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/drawTAMUButton"
-        android:layout_alignBottom="@+id/drawTAMUButton"
-        android:layout_alignLeft="@+id/drawTriangleButton"
-        android:layout_alignRight="@+id/drawTriangleButton"
-        android:text="Puppy" />
-
-    <Button
-        android:id="@+id/drawTAMUButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/drawInfoButton"
-        android:layout_alignBottom="@+id/drawInfoButton"
-        android:layout_toRightOf="@+id/drawInfoButton"
-        android:text="TAMU" />
-
-    <Button
-        android:id="@+id/drawSquareButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/drawTriangleButton"
-        android:layout_alignBottom="@+id/drawTriangleButton"
-        android:layout_alignLeft="@+id/drawTAMUButton"
-        android:text="Square" />
+        android:layout_alignLeft="@+id/spinner1"
+        android:layout_alignRight="@+id/spinner1"
+        android:layout_below="@+id/spinner1"
+        android:text="Draw" />
 
     <Button
         android:id="@+id/clearButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/drawInfoButton"
-        android:layout_alignParentBottom="true"
-        android:layout_alignRight="@+id/drawPuppyButton"
-        android:layout_marginBottom="22dp"
+        android:layout_alignLeft="@+id/drawButton"
+        android:layout_alignRight="@+id/drawButton"
+        android:layout_below="@+id/drawButton"
         android:text="Clear Screen" />
 
     <Button
         android:id="@+id/connectButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/clearButton"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="50dp"
+        android:layout_alignLeft="@+id/clearButton"
+        android:layout_below="@+id/clearButton"
         android:text="Connect to Device" />
-
-    <Button
-        android:id="@+id/frameButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:text="Frame" />
 
     <Button
         android:id="@+id/livedrawButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/clearButton"
-        android:layout_centerHorizontal="true"
+        android:layout_alignLeft="@+id/connectButton"
+        android:layout_below="@+id/connectButton"
         android:text="Live Draw" />
 
 </RelativeLayout>
