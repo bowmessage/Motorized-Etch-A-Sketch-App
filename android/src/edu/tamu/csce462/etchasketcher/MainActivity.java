@@ -195,8 +195,7 @@ public class MainActivity extends Activity {
 					PrintWriter writer = new PrintWriter(outputStream);
 					writer.write("circle test");
 					writer.flush();
-				}
-				else {
+				} else {
 					Context context = getApplicationContext();
 					CharSequence text = "Must connect to device first!";
 					int duration = Toast.LENGTH_SHORT;
@@ -215,8 +214,7 @@ public class MainActivity extends Activity {
 					PrintWriter writer = new PrintWriter(outputStream);
 					writer.write("[100.0,100.0,100.0,500.0,500.0,500.0,500.0,100.0,100.0,100.0]");
 					writer.flush();
-				}
-				else {
+				} else {
 					Context context = getApplicationContext();
 					CharSequence text = "Must connect to device first!";
 					int duration = Toast.LENGTH_SHORT;
@@ -235,8 +233,7 @@ public class MainActivity extends Activity {
 					PrintWriter writer = new PrintWriter(outputStream);
 					writer.write("[500,100,50,500,950,500,500,100");
 					writer.flush();
-				}
-				else {
+				} else {
 					Context context = getApplicationContext();
 					CharSequence text = "Must connect to device first!";
 					int duration = Toast.LENGTH_SHORT;
@@ -255,8 +252,7 @@ public class MainActivity extends Activity {
 					PrintWriter writer = new PrintWriter(outputStream);
 					writer.write("[200,100,200,150,300,150,300,125,500,125,500,500,300,500,300,550,750,550,750,500,700,500,700,125,900,125,900,150,950,150,950,100,200,100]");
 					writer.flush();
-				}
-				else {
+				} else {
 					Context context = getApplicationContext();
 					CharSequence text = "Must connect to device first!";
 					int duration = Toast.LENGTH_SHORT;
@@ -275,8 +271,7 @@ public class MainActivity extends Activity {
 					PrintWriter writer = new PrintWriter(outputStream);
 					writer.write("puppy test");
 					writer.flush();
-				}
-				else {
+				} else {
 					Context context = getApplicationContext();
 					CharSequence text = "Must connect to device first!";
 					int duration = Toast.LENGTH_SHORT;
@@ -295,8 +290,7 @@ public class MainActivity extends Activity {
 					PrintWriter writer = new PrintWriter(outputStream);
 					writer.write("info test");
 					writer.flush();
-				}
-				else {
+				} else {
 					Context context = getApplicationContext();
 					CharSequence text = "Must connect to device first!";
 					int duration = Toast.LENGTH_SHORT;
@@ -306,7 +300,7 @@ public class MainActivity extends Activity {
 				}
 			}
 		});
-		
+
 		Button frameButton = (Button) findViewById(R.id.frameButton);
 		frameButton.setOnClickListener(new OnClickListener() {
 			@Override
@@ -315,8 +309,7 @@ public class MainActivity extends Activity {
 					PrintWriter writer = new PrintWriter(outputStream);
 					writer.write("[0,0,0,650,1000,650,1000,0,0,0]");
 					writer.flush();
-				}
-				else {
+				} else {
 					Context context = getApplicationContext();
 					CharSequence text = "Must connect to device first!";
 					int duration = Toast.LENGTH_SHORT;
@@ -335,8 +328,7 @@ public class MainActivity extends Activity {
 					PrintWriter writer = new PrintWriter(outputStream);
 					writer.write("[0,0]");
 					writer.flush();
-				}
-				else {
+				} else {
 					Context context = getApplicationContext();
 					CharSequence text = "Must connect to device first!";
 					int duration = Toast.LENGTH_SHORT;
@@ -346,7 +338,7 @@ public class MainActivity extends Activity {
 				}
 			}
 		});
-		
+
 		Button connectButton = (Button) findViewById(R.id.connectButton);
 		connectButton.setOnClickListener(new OnClickListener() {
 			@Override
@@ -366,16 +358,16 @@ public class MainActivity extends Activity {
 				}
 			}
 		});
-		
+
 		Button livedrawButton = (Button) findViewById(R.id.livedrawButton);
 		livedrawButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				if (isConnected == true) {
-					    Intent intent = new Intent(MainActivity.this, LiveDrawActivity.class);
-					    startActivity(intent);
-				}
-				else {
+					Intent intent = new Intent(MainActivity.this,
+							LiveDrawActivity.class);
+					startActivity(intent);
+				} else {
 					Context context = getApplicationContext();
 					CharSequence text = "Must connect to device first!";
 					int duration = Toast.LENGTH_SHORT;
@@ -393,39 +385,11 @@ public class MainActivity extends Activity {
 	private boolean isConnected;
 
 	private void bluetooth() throws IOException, IllegalAccessException,
-			IllegalArgumentException, InvocationTargetException, NoSuchMethodException {
+			IllegalArgumentException, InvocationTargetException,
+			NoSuchMethodException {
 		BluetoothAdapter blue1 = BluetoothAdapter.getDefaultAdapter();
 		if (blue1 != null) {
 			if (blue1.isEnabled()) {
-				/*
-				 * BroadcastReceiver bReceiver = new BroadcastReceiver(){
-				 * 
-				 * @Override public void onReceive(Context context, Intent
-				 * intent) { String action = intent.getAction();
-				 * 
-				 * if (BluetoothDevice.ACTION_FOUND.equals(action)){
-				 * Log.d("BLUETOOTH", "Got FOUND action"); }
-				 * 
-				 * if
-				 * (BluetoothAdapter.ACTION_DISCOVERY_STARTED.equals(action)){
-				 * Log.d("BLUETOOTH", "Got STARTED action"); }
-				 * 
-				 * if
-				 * (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)){
-				 * Log.d("BLUETOOTH", "Got FINISHED action"); } } };
-				 * 
-				 * registerReceiver(bReceiver, new
-				 * IntentFilter(BluetoothDevice.ACTION_FOUND));
-				 * registerReceiver(bReceiver, new
-				 * IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED));
-				 * registerReceiver(bReceiver, new
-				 * IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_STARTED));
-				 * 
-				 * 
-				 * 
-				 * 
-				 * blue1.startDiscovery();
-				 */
 
 				Set<BluetoothDevice> boundedDevices = blue1.getBondedDevices();
 
@@ -448,7 +412,7 @@ public class MainActivity extends Activity {
 						// rasp.createRfcommSocketToServiceRecord(uuids[0].getUuid());
 						Method method = rasp.getClass()
 								.getMethod("createRfcommSocket",
-										new Class[] { int.class }); 
+										new Class[] { int.class });
 						BluetoothSocket socket = (BluetoothSocket) method
 								.invoke(rasp, 1);
 						// BluetoothSocket socket = rasp.createRfcommSocket(1);
@@ -458,21 +422,21 @@ public class MainActivity extends Activity {
 						outputStream = socket.getOutputStream();
 						inStream = socket.getInputStream();
 						Scanner scan = new Scanner(inStream);
-						//if(scan.hasNext()){
-						//	Log.d("BLUETOOTH",scan.next());
-						//}
+						// if(scan.hasNext()){
+						// Log.d("BLUETOOTH",scan.next());
+						// }
 						try {
 							Thread.sleep(2000);
 						} catch (InterruptedException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
-						
+
 						PrintWriter writer = new PrintWriter(outputStream);
 						writer.write("Connected to Pi.");
 						isConnected = true;
 						writer.flush();
-						
+
 					}
 
 				}
