@@ -40,7 +40,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".LiveDrawActivity"
+            android:name=".LiveDrawFragment"
             android:label="@string/title_activity_live_draw" >
         </activity>
     </application>

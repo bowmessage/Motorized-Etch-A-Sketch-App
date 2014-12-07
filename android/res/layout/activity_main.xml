@@ -8,60 +8,29 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".MainActivity" >
 
+    <android.support.v4.view.ViewPager
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/pager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <android.support.v4.view.PagerTabStrip
+            android:id="@+id/pager_tab_strip"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top"
+            android:background="#33b5e5"
+            android:paddingBottom="5dp"
+            android:paddingTop="5dp"
+            android:textColor="#fff" />
+    </android.support.v4.view.ViewPager>
+
     <TextView
         android:id="@+id/textView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="TAMU CSCE 462 Group 3" />
-
-    <Button
-        android:id="@+id/takePictureButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/textView1"
-        android:layout_below="@+id/textView1"
-        android:layout_marginTop="18dp"
-        android:text="Press to Take Photo" />
-
-    <Spinner
-        android:id="@+id/spinner1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/takePictureButton"
-        android:layout_below="@+id/takePictureButton" />
-
-    <Button
-        android:id="@+id/drawButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/spinner1"
-        android:layout_alignRight="@+id/spinner1"
-        android:layout_below="@+id/spinner1"
-        android:text="Draw" />
-
-    <Button
-        android:id="@+id/clearButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/drawButton"
-        android:layout_alignRight="@+id/drawButton"
-        android:layout_below="@+id/drawButton"
-        android:text="Clear Screen" />
-
-    <Button
-        android:id="@+id/connectButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/clearButton"
-        android:layout_below="@+id/clearButton"
-        android:text="Connect to Device" />
-
-    <Button
-        android:id="@+id/livedrawButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/connectButton"
-        android:layout_below="@+id/connectButton"
-        android:text="Live Draw" />
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:text="TAMU CSCE 462 Group 3 Fall 2014" />
 
 </RelativeLayout>
