@@ -72,14 +72,14 @@ def moveTo(x,y):
   slope = float(y)/float(x)
 
   if x < curX:
-    horiz_thread = Thread(target=left, args=(curX - x, .001))
+    horiz_thread = threading.Thread(target=left, args=(curX - x, .001))
   else:
-    horiz_thread = Thread(target=right, args=(x - curX, .001))
+    horiz_thread = threading.Thread(target=right, args=(x - curX, .001))
 
   if y < curY:
-    vert_thread = Thread(target=up, args=(curY - y, .001))
+    vert_thread = threading.Thread(target=up, args=(curY - y, .001))
   else:
-    vert_thread = Thread(target=down, args=(y - curY, .001))
+    vert_thread = threading.Thread(target=down, args=(y - curY, .001))
 
   horiz_thread.start()
   vert_thread.start()
