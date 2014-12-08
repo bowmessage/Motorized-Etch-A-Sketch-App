@@ -69,7 +69,9 @@ def moveTo(x,y):
   horiz_thread = None
   vert_thread = None
 
-  slope = float(y)/float(x)
+  if x != 0:
+    slope = float(y)/float(x)
+
 
   if x < curX:
     horiz_thread = threading.Thread(target=left, args=(curX - x, .001))
