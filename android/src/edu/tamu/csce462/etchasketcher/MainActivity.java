@@ -233,9 +233,7 @@ public class MainActivity extends FragmentActivity {
 						outputStream = socket.getOutputStream();
 						inStream = socket.getInputStream();
 						Scanner scan = new Scanner(inStream);
-						// if(scan.hasNext()){
-						// Log.d("BLUETOOTH",scan.next());
-						// }
+						
 						try {
 							Thread.sleep(2000);
 						} catch (InterruptedException e) {
