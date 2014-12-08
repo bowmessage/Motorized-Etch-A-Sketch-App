@@ -67,17 +67,17 @@ public class PresetFragment extends Fragment {
 		} else if (item.equals("Spiral")) {
 			return pointsStringForSpiralOfRadius(1000);
 		} else if (item.equals("Square")) {
-			return "[100.0,100.0,100.0,500.0,500.0,500.0,500.0,100.0,100.0,100.0]";
+			return "[100.0,100.0,100.0,800.0,800.0,800.0,800.0,100.0,100.0,100.0]";
 		} else if (item.equals("Triangle")) {
 			return "[500,100,50,500,950,500,500,100]";
 		} else if (item.equals("Puppy")) {
 			return "puppy test";
 		} else if (item.equals("TAMU")) {
-			return "[200,100,200,150,300,150,300,125,500,125,500,500,300,500,300,550,750,550,750,500,700,500,700,125,900,125,900,150,950,150,950,100,200,100]";
+			return "[20,10,200,150,300,150,300,125,500,125,500,500,300,500,300,550,750,550,750,500,700,500,700,125,900,125,900,150,950,150,950,100,200,100]";
 		} else if (item.equals("Info")) {
 			return "info test";
 		} else if (item.equals("Frame")) {
-			return "[0,0,0,650,1000,650,1000,0,0,0]";
+			return "[0,0,0,3000,4400,3000,4400,0,0,0]";
 		} else
 			return "[]";
 	}
@@ -154,13 +154,13 @@ public class PresetFragment extends Fragment {
 		return view;
 	}
 
-	public static final int numLoops = 10;
+	public static final int numLoops = 15;
 
 	protected String pointsStringForSpiralOfRadius(int radius) {
 		StringBuilder ret = new StringBuilder();
 		ret.append("[");
 		double limit = numLoops * (2 * Math.PI + .3);
-		double incr = Math.PI / 75;
+		double incr = Math.PI / 40;
 		int numPts = (int) (limit / incr);
 		int curPt = 0;
 		for (float i = 0; i < limit; i += incr) {
