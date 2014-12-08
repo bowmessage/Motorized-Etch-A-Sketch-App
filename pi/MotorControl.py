@@ -6,6 +6,12 @@ stepDelay = .0001
 curX = 0
 curY = 0
 
+def setup():
+  GPIO.setup(14, GPIO.OUT) #dir
+  GPIO.setup(15, GPIO.OUT) #step probe
+  GPIO.setup(23, GPIO.OUT) #dir
+  GPIO.setup(24, GPIO.OUT) #step probe
+
 def advertise():
   server_sock=bluetooth.BluetoothSocket( bluetooth.RFCOMM )
 
@@ -53,24 +59,38 @@ def moveTo(x,y):
   global curX
   global curY
 
-def setup():
-  GPIO.setup(14, GPIO.OUT) #dir
-  GPIO.setup(15, GPIO.OUT) #step probe
-  GPIO.setup(23, GPIO.OUT) #dir
-  GPIO.setup(24, GPIO.OUT) #step probe
 
-def ccwStep(vert, betweenDelay):
+
+
+def ccwStep(vert, num, betweenDelay):
   if vert:
     GPIO.output(14, GPIO.LOW)
   else:
     GPIO.output(23, GPIO.LOW)
-  step()
-  time.sleep(betweenDelay)
+  for x in range(0,num):
+    step(vert)
+    time.sleep(betweenDelay)
 
-def cwStep():
-  GPIO.output(23, GPIO.HIGH)
-  step()
+def cwStep(vert, num, betweenDelay):
+  if vert:
+    GPIO.output(14, GPIO.HIGH)
+  else:
+    GPIO.output(23, GPIO.HIGH)
+  for x in range(0,num):
+    step(vert)
+    time.sleep(betweenDelay)
 
+
+def right(num, betweenDelay):
+  cwStep(True,num,betweenDelay)
+
+def left(num, betweenDelay):
+  ccwStep(True,num,betweenDelay)
+
+def up(num, betweenDelay):
+  ccwStep(False,num,betweenDelay)
+def down(num, betweenDelay):
+  cwStep(False,num,betweenDelay)
 
 
 def step(vert):
@@ -82,6 +102,15 @@ def step(vert):
   GPIO.output(pin, GPIO.LOW)
   time.sleep(stepDelay)
 
+
 setup()
-run()
+
+s = 0
+for z in xrange(10,1000,50):
+  down(z,s)
+  right(z,s)
+  up(z,s)
+  left(z,s)
+
+
 GPIO.cleanup()
