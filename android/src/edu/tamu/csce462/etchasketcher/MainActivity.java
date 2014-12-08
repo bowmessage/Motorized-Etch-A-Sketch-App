@@ -18,6 +18,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
+import android.graphics.Path;
 import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
@@ -41,26 +42,25 @@ import android.widget.Toast;
 
 public class MainActivity extends FragmentActivity {
 
-	/*
-	 * private BufferedImage bufferedImageFromBitmap(Bitmap in){
-	 * 
-	 * 
-	 * BufferedImage ret = new BufferedImage(in.getWidth(), in.getHeight(),
-	 * BufferedImage.TYPE_INT_ARGB);
-	 * 
-	 * int[] buffer = new int[in.getWidth() * in.getHeight()];
-	 * in.getPixels(buffer, 0, 0, 0, 0, in.getWidth(), in.getHeight());
-	 * ret.setRGB(0, 0, in.getWidth(), in.getHeight(), buffer, 0,
-	 * in.getWidth());
-	 * 
-	 * return ret; }
-	 * 
-	 * private Bitmap bitampFromBufferedImage(BufferedImage in){ int[] buffer =
-	 * new int[in.getWidth() * in.getHeight()]; in.getRGB(0, 0, in.getWidth(),
-	 * in.getHeight(), buffer, 0, in.getWidth()); return
-	 * Bitmap.createBitmap(buffer,in.getWidth(),in.getHeight(),
-	 * Bitmap.Config.ARGB_4444); }
-	 */
+	public static Path pathFromString(String pointString) {
+		if (pointString.length() < 2)
+			return new Path();
+		Path ret = new Path();
+
+		String[] points = pointString.substring(1, pointString.length() - 1)
+				.split(",");
+
+		try {
+			for (int i = 0; i < points.length; i += 2) {
+				ret.lineTo(Float.parseFloat(points[i]),
+						Float.parseFloat(points[i + 1]));
+			}
+		} catch (NumberFormatException nfe) {
+			return new Path();
+		}
+
+		return ret;
+	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
@@ -107,7 +107,7 @@ public class MainActivity extends FragmentActivity {
 
 	CustomPagerAdapter mCustomPagerAdapter;
 	SwipeToggleableViewPager mViewPager;
-	
+
 	class CustomPagerAdapter extends FragmentPagerAdapter {
 
 		Context mContext;
@@ -233,7 +233,7 @@ public class MainActivity extends FragmentActivity {
 						outputStream = socket.getOutputStream();
 						inStream = socket.getInputStream();
 						Scanner scan = new Scanner(inStream);
-						
+
 						try {
 							Thread.sleep(2000);
 						} catch (InterruptedException e) {

@@ -8,6 +8,7 @@
     
     <string-array name="drawable_array">
         <item>Circle</item>
+        <item>Spiral</item>
         <item>Square</item>
         <item>Triangle</item>
         <item>Puppy</item>
