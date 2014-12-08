@@ -23,6 +23,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 public class PresetFragment extends Fragment {
+	Toast toast;
 
 	
 
@@ -142,8 +143,10 @@ public class PresetFragment extends Fragment {
 					Context context = getActivity();
 					CharSequence text = "Must connect to device first!";
 					int duration = Toast.LENGTH_SHORT;
-
-					Toast toast = Toast.makeText(context, text, duration);
+					if(toast != null) {
+						toast.cancel();
+					}
+					toast = Toast.makeText(context, text, duration);
 					toast.show();
 				}
 			}

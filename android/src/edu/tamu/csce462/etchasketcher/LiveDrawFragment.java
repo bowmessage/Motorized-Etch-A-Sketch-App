@@ -22,6 +22,8 @@ public class LiveDrawFragment extends Fragment {
 
 	private boolean isRealTime;
 	private ArrayList<Float> realtimeList = new ArrayList<Float>();
+	
+	Toast toast;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -73,16 +75,20 @@ public class LiveDrawFragment extends Fragment {
 						Context context = getActivity();
 						CharSequence text = "Real Time mode must be OFF!";
 						int duration = Toast.LENGTH_SHORT;
-
-						Toast toast = Toast.makeText(context, text, duration);
+						if(toast != null) {
+							toast.cancel();
+						}
+						toast = Toast.makeText(context, text, duration);
 						toast.show();
 					}
 				} else {
 					Context context = getActivity();
 					CharSequence text = "Must connect to device first!";
 					int duration = Toast.LENGTH_SHORT;
-
-					Toast toast = Toast.makeText(context, text, duration);
+					if(toast != null) {
+						toast.cancel();
+					}
+					toast = Toast.makeText(context, text, duration);
 					toast.show();
 				}
 			}
@@ -126,8 +132,10 @@ public class LiveDrawFragment extends Fragment {
 					Context context = getActivity();
 					CharSequence text = "Must connect to device first!";
 					int duration = Toast.LENGTH_SHORT;
-
-					Toast toast = Toast.makeText(context, text, duration);
+					if(toast != null) {
+						toast.cancel();
+					}
+					toast = Toast.makeText(context, text, duration);
 					toast.show();
 					return true;
 				}
