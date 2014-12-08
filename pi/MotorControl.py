@@ -77,9 +77,9 @@ def moveTo(x,y):
     horiz_thread = Thread(target=right, args=(x - curX, .001))
 
   if y < curY:
-    vert_thread = Thread(target=up, args(curY - y, .001))
+    vert_thread = Thread(target=up, args=(curY - y, .001))
   else:
-    vert_thread = Thread(target=down, args(y - curY, .001))
+    vert_thread = Thread(target=down, args=(y - curY, .001))
 
   horiz_thread.start()
   vert_thread.start()

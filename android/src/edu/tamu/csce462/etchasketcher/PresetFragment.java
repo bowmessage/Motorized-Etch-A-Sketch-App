@@ -48,7 +48,7 @@ public class PresetFragment extends Fragment {
 
 					String toWrite = "";
 					if (selected.equals("Circle")) {
-						toWrite = pointsStringForCircleOfRadius(100);
+						toWrite = pointsStringForCircleOfRadius(500);
 					} else if (selected.equals("Square")) {
 						toWrite = "[100.0,100.0,100.0,500.0,500.0,500.0,500.0,100.0,100.0,100.0]";
 					} else if (selected.equals("Triangle")) {
