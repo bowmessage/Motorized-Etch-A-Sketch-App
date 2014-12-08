@@ -3,6 +3,7 @@ import RPi.GPIO as GPIO, time, os, bluetooth, threading
 GPIO.setmode(GPIO.BCM)
 
 stepDelay = .0001
+betweenSteps = .01
 curX = 0
 curY = 0
 
@@ -64,6 +65,7 @@ def draw(points_string):
 def moveTo(x,y):
   global curX
   global curY
+  global betweenSteps
   print("moving to:",x,y)
 
   horiz_thread = None
@@ -73,15 +75,25 @@ def moveTo(x,y):
     slope = float(y)/float(x)
 
 
-  if x < curX:
-    horiz_thread = threading.Thread(target=left, args=(curX - x, .001))
+  xBetween = betweenSteps
+  yBetween = betweenSteps
+
+  if slope < 1 and slope > 0:
+    yBetween = betweenSteps * 1/slope
   else:
-    horiz_thread = threading.Thread(target=right, args=(x - curX, .001))
+    xBetween = betweenSteps * slope
+
+  
+
+  if x < curX:
+    horiz_thread = threading.Thread(target=left, args=(curX - x, xBetween))
+  else:
+    horiz_thread = threading.Thread(target=right, args=(x - curX, xBetween))
 
   if y < curY:
-    vert_thread = threading.Thread(target=up, args=(curY - y, .001))
+    vert_thread = threading.Thread(target=up, args=(curY - y, yBetween))
   else:
-    vert_thread = threading.Thread(target=down, args=(y - curY, .001))
+    vert_thread = threading.Thread(target=down, args=(y - curY, yBetween))
 
   horiz_thread.start()
   vert_thread.start()
