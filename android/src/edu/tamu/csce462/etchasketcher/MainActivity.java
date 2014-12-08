@@ -91,6 +91,10 @@ public class MainActivity extends FragmentActivity {
 				PrintWriter writer = new PrintWriter(MainActivity.outputStream);
 				writer.write("[0,0]");
 				writer.flush();
+				LiveDrawFragment.pathString = "[";
+				LiveDrawFragment.mCanvasView.invalidate();
+				LiveDrawFragment.realtimeList.clear();
+				LiveDrawFragment.realtimeList.trimToSize();
 			} else {
 				Context context = this;
 				CharSequence text = "Must connect to device first!";

@@ -3,7 +3,12 @@ package edu.tamu.csce462.etchasketcher;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 
+import edu.tamu.csce462.etchasketcher.PresetFragment.PresetCanvasView;
+
 import android.content.Context;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -15,15 +20,53 @@ import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
 public class LiveDrawFragment extends Fragment {
 
 	private boolean isRealTime;
-	private ArrayList<Float> realtimeList = new ArrayList<Float>();
+	public static ArrayList<Float> realtimeList = new ArrayList<Float>();
 	
 	Toast toast;
+	public static String pathString;
+	public static PresetCanvasView mCanvasView;
+	
+	public static class PresetCanvasView extends View {
+
+		private Paint paint;
+
+		public PresetCanvasView(Context context) {
+			super(context);
+			paint = new Paint();
+			pathString = "[";
+		}
+
+		@Override
+		protected void onDraw(Canvas canvas) {
+			super.onDraw(canvas);
+
+			int x = getWidth();
+			int y = getHeight();
+
+			// Bg
+			paint.setStyle(Paint.Style.FILL);
+			paint.setColor(Color.GRAY);
+			canvas.drawPaint(paint);
+
+			// Path
+			paint.setStyle(Paint.Style.STROKE);
+			paint.setStrokeWidth(5);
+			paint.setColor(Color.RED);
+			canvas.drawPath(MainActivity.pathFromString(pathString), paint);
+
+			// Use Color.parseColor to define HTML colors
+			// paint.setColor(Color.parseColor("#CD5C5C"));
+			// canvas.drawCircle(x / 2, y / 2, radius, paint);
+		}
+	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -34,6 +77,16 @@ public class LiveDrawFragment extends Fragment {
 
 		ToggleButton realtimeToggle = (ToggleButton) view
 				.findViewById(R.id.realtimeToggle);
+		
+		RelativeLayout parentLayout = (RelativeLayout) view
+				.findViewById(R.id.RelativeLayout);
+		final PresetCanvasView canvasView = new PresetCanvasView(getActivity());
+		mCanvasView = canvasView;
+		RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(875,597);
+		params.leftMargin = 95;
+		params.topMargin = 90;
+		parentLayout.addView(canvasView, params);
+		
 		realtimeToggle
 				.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 					public void onCheckedChanged(CompoundButton buttonView,
@@ -71,6 +124,8 @@ public class LiveDrawFragment extends Fragment {
 						writer.flush();
 						realtimeList.clear();
 						realtimeList.trimToSize();
+						pathString = "[";
+						canvasView.invalidate();
 					} else {
 						Context context = getActivity();
 						CharSequence text = "Real Time mode must be OFF!";
@@ -94,8 +149,8 @@ public class LiveDrawFragment extends Fragment {
 			}
 		});
 
-		final View drawField = (View) view.findViewById(R.id.drawView);
-		drawField.setOnTouchListener(new OnTouchListener() {
+		//final View drawField = (View) view.findViewById(R.id.drawView);
+		canvasView.setOnTouchListener(new OnTouchListener() {
 			public boolean onTouch(View v, MotionEvent ev) {
 				switch (ev.getAction()) {
 				case MotionEvent.ACTION_DOWN:
@@ -121,11 +176,23 @@ public class LiveDrawFragment extends Fragment {
 					if (isRealTime == true) {
 						PrintWriter writer = new PrintWriter(
 								MainActivity.outputStream);
-						writer.write("[" + ev.getX() + "," + ev.getY() + "]");
+						writer.write("[" + ev.getX() * 5.02f + "," + ev.getY() * 5.1f + "]");
 						writer.flush();
+						pathString.substring(0,pathString.length()-1);
+						pathString = pathString + ev.getX() + "," + ev.getY() + "]";
+						Log.d("", pathString);
+						canvasView.invalidate();
+						pathString = pathString.substring(0, pathString.length()-1);
+						pathString = pathString + ",";
 					} else {
-						realtimeList.add(ev.getX());
-						realtimeList.add(ev.getY());
+						realtimeList.add(ev.getX() * 5.02f);
+						realtimeList.add(ev.getY() * 5.1f);
+						pathString.substring(0,pathString.length()-1);
+						pathString = pathString + ev.getX() + "," + ev.getY() + "]";
+						Log.d("", pathString);
+						canvasView.invalidate();
+						pathString = pathString.substring(0, pathString.length()-1);
+						pathString = pathString + ",";
 					}
 					return true;
 				} else {
