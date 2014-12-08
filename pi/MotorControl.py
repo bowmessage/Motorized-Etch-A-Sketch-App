@@ -3,9 +3,12 @@ import RPi.GPIO as GPIO, time, os, bluetooth, threading
 GPIO.setmode(GPIO.BCM)
 
 stepDelay = .0001
-betweenSteps = .01
+betweenSteps = .001
 curX = 0
 curY = 0
+
+class BluetoothDisconnectException(Exception):
+  pass
 
 def setup():
   GPIO.setup(14, GPIO.OUT) #dir
@@ -37,7 +40,7 @@ def communicate(socket):
   while True:
     chunk = socket.recv(65535)
     if chunk == "":
-      return
+      raise BluetoothDisconnectException("The phone has disconnected.")
     buffer += chunk
 
     start = buffer.find('[')
@@ -62,27 +65,40 @@ def draw(points_string):
 
 
 
-def moveTo(x,y):
+def moveTo(x,y,override=False):
   global curX
   global curY
   global betweenSteps
+
+  if not override:
+    if x < 0:
+      x = 0
+    if y < 0:
+      y = 0
+
+
   print("moving to:",x,y)
 
   horiz_thread = None
   vert_thread = None
 
-  if x != 0:
-    slope = float(y)/float(x)
+  xdiff = float(abs(x-curX))
+  ydiff = float(abs(y-curY))
+
+  slope = 9999 #infinity
+  if xdiff != 0:
+    slope = float(ydiff)/float(xdiff)
 
 
   xBetween = betweenSteps
   yBetween = betweenSteps
 
   if slope < 1 and slope > 0:
-    yBetween = betweenSteps * 1/slope
-  else:
-    xBetween = betweenSteps * slope
+    yBetween = betweenSteps * 1/slope + ((xdiff-ydiff) * stepDelay)/ydiff
+  elif slope > 1 and xdiff != 0:
+    xBetween = betweenSteps * slope + ((ydiff-xdiff) * stepDelay)/xdiff
 
+  print("xBetween",xBetween,"yBetween",yBetween)
   
 
   if x < curX:
@@ -150,7 +166,23 @@ def step(vert):
 
 setup()
 
-communicate(advertise())
+
+
+#moveTo(-100,-100,True)
+
+try:
+
+  while True:
+
+    try:
+      communicate(advertise())
+    except (bluetooth.BluetoothError, BluetoothDisconnectException):
+      moveTo(0,0)
+
+except (KeyboardInterrupt, SystemExit):
+
+  moveTo(0,0)
+  GPIO.cleanup()
 
 
 
@@ -162,4 +194,3 @@ for z in xrange(700,700,50):
   right(z,s)
 
 
-GPIO.cleanup()
