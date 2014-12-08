@@ -29,26 +29,32 @@ def advertise():
   client_sock,address = server_sock.accept()
   print "Accepted from ",address
 
+  return client_sock
+
 def communicate(socket):
   buffer = ""
-  chunk = recv(65535)
-  if chunk == "":
-    return
-  buffer += chunk
+  while True:
+    chunk = socket.recv(65535)
+    if chunk == "":
+      return
+    buffer += chunk
 
-  start = buffer.find('[')
-  end = buffer.find(']')
+    start = buffer.find('[')
+    end = buffer.find(']')
 
-  while start != -1 and end != -1:
-    draw(buffer[start+1:end])
-    buffer = buffer[end+1:]
+    while start != -1 and end != -1:
+      draw(buffer[start+1:end])
+      buffer = buffer[end+1:]
+
+      start = buffer.find('[')
+      end = buffer.find(']')
 
 
 def draw(points_string):
   #eg 1.35,234,352,3.2
   print("Drawing: ",points_string)
   points = points_string.split(",")
-  for i in xrange(0,len(points_string),2):
+  for i in xrange(0,len(points),2):
     x = int(float(points[i]))
     y = int(float(points[i+1]))
     moveTo(x,y)
@@ -58,6 +64,9 @@ def draw(points_string):
 def moveTo(x,y):
   global curX
   global curY
+  print("moving to:",x,y)
+  curX = x
+  curY = y
 
 
 
@@ -105,12 +114,16 @@ def step(vert):
 
 setup()
 
+communicate(advertise())
+
+
+
 s = 0
-for z in xrange(10,1000,50):
+for z in xrange(700,700,50):
   down(z,s)
-  right(z,s)
-  up(z,s)
   left(z,s)
+  up(z,s)
+  right(z,s)
 
 
 GPIO.cleanup()
