@@ -52,7 +52,7 @@ public class PresetFragment extends Fragment {
 					} else if (selected.equals("Square")) {
 						toWrite = "[100.0,100.0,100.0,500.0,500.0,500.0,500.0,100.0,100.0,100.0]";
 					} else if (selected.equals("Triangle")) {
-						toWrite = "[500,100,50,500,950,500,500,100";
+						toWrite = "[500,100,50,500,950,500,500,100]";
 					} else if (selected.equals("Puppy")) {
 						toWrite = "puppy test";
 					} else if (selected.equals("TAMU")) {
